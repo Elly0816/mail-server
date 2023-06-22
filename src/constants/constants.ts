@@ -23,6 +23,7 @@ const MONGOCONNECT =
   'mongodb+srv://elzoremmanuel:Odm1OjxLMxhWhlAo@cluster0.o2ixh5p.mongodb.net/?retryWrites=true&w=majority';
 const ACCESS = 'This is my access token secret';
 const REFRESH = 'This is my refresh token secret';
-const CLIENT = 'http://localhost:5173';
+// const CLIENT = 'http://localhost:5173';
+const CLIENT = '*';
 
 export { PORT, MONGOCONNECT, ACCESS, REFRESH, CLIENT };
