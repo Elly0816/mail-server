@@ -88,28 +88,40 @@ const messageInThread = async (
 //Add message to thread
 const addMessageToThread = async (
   messageId: messageFromDb['_id'],
-  threadId: threadFromDb['_id']
+  threadId: threadFromDb['_id'],
+  lastMessageBody: string
 ): Promise<boolean> => {
-  let thread = await Thread.bulkWrite([
-    {
-      updateOne: {
-        filter: { _id: threadId },
-        update: { $push: { messages: messageId.toString() } },
-      },
-    },
+  let thread = await Thread.findByIdAndUpdate(threadId, {
+    $set: { lastModified: new Date(), lastMessage: lastMessageBody },
+    $push: { messages: messageId.toString() },
+  });
+  // let thread = await Thread.bulkWrite([
+  //   {
+  //     updateMany: {
+  //       filter: { _id: threadId },
+  //       update: { $push: { messages: messageId.toString() } },
+  //     },
+  //   },
 
-    {
-      updateOne: {
-        filter: { _id: threadId },
-        update: { $set: { lastModified: new Date() } },
-      },
-    },
-  ]);
+  //   {
+  //     updateOne: {
+  //       filter: { _id: threadId },
+  //       update: { $set: { lastModified: new Date() } },
+  //     },
+  //   },
+
+  //   {
+  //     updateOne: {
+  //       filter: { _id: threadId },
+  //       update: { $set: { lastMessage: lastMessageBody } },
+  //     },
+  //   },
+  // ]);
   // console.log('Thread in add message function');
   // console.log(thread);
   // console.log(thread.isOk());
   let newThread;
-  if (thread.isOk()) {
+  if (thread) {
     newThread = (await Thread.findOne(threadId).lean()) as threadFromDb;
   }
   console.log(JSON.stringify(newThread));

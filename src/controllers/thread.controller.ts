@@ -104,7 +104,11 @@ const deleteThreadFromUser = async (
 const createThread = async (
   message: messageFromDb
 ): Promise<threadFromDb | undefined> => {
-  const newThread = await Thread.create({ messages: [message._id.toString()] });
+  const newThread = await Thread.create({
+    messages: [message._id.toString()],
+    lastMessage: message.body,
+    lastModified: Date.now(),
+  });
   let thread = (await Thread.findById(
     newThread._id
   ).lean()) as unknown as threadFromDb;

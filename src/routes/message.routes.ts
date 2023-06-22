@@ -63,11 +63,12 @@ messageRoute.get(`${path}/:id`, async (req: Request, res: Response) => {
 //Create Message
 messageRoute.post(path, async (req: Request, res: Response) => {
   const from = req.user?.email;
-  const message = { ...req?.body.message, from: from } as message;
+  const message = { ...req?.body, from: from } as message;
   // const message = req.body.message as message;
   const { threadId, title, body, to } = message;
   const otherUser = await getUser('email', to);
   if (!(title && body && from && to)) {
+    // console.log(req.body);
     console.log('Make sure you entered the correct fields');
     res
       .status(400)
@@ -79,7 +80,8 @@ messageRoute.post(path, async (req: Request, res: Response) => {
       if (newMessage) {
         const messageAddedToThread = await addMessageToThread(
           newMessage._id,
-          thread._id
+          thread._id,
+          req?.body.message
         );
         if (messageAddedToThread) {
           console.log('message added to thread');
@@ -100,7 +102,8 @@ messageRoute.post(path, async (req: Request, res: Response) => {
       const thread = await createThread(newMessage);
       const added = await addMessageToThread(
         newMessage._id,
-        new mongoose.Types.ObjectId(thread?._id)
+        new mongoose.Types.ObjectId(thread?._id),
+        req?.body.message
       );
       console.log('Thread, added');
       console.log(thread, added);

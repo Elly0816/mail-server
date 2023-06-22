@@ -12,6 +12,7 @@ const thread = {
     default: Date.now,
   },
   messages: { type: [String] },
+  lastMessage: String,
 };
 
 export interface threadFromDb {
@@ -19,10 +20,12 @@ export interface threadFromDb {
   createdAt: Date;
   lastModified: Date;
   messages: [mongoose.Types.ObjectId];
+  lastMessage: string;
 }
 
 export interface thread {
   messages: [messageFromDb['_id'] | undefined];
+  lastMessage: string;
 }
 
 const threadSchema = new Schema(thread);
