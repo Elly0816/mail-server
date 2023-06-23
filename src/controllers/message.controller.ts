@@ -92,7 +92,7 @@ const addMessageToThread = async (
   lastMessageBody: string
 ): Promise<boolean> => {
   let thread = await Thread.findByIdAndUpdate(threadId, {
-    $set: { lastModified: new Date(), lastMessage: lastMessageBody },
+    $set: { lastModified: Date.now(), lastMessage: lastMessageBody },
     $push: { messages: messageId.toString() },
   });
   // let thread = await Thread.bulkWrite([
