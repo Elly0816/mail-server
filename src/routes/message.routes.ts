@@ -100,15 +100,15 @@ messageRoute.post(path, async (req: Request, res: Response) => {
       }
     } else {
       const thread = await createThread(newMessage);
-      const added = await addMessageToThread(
-        newMessage._id,
-        new mongoose.Types.ObjectId(thread?._id),
-        req?.body.message
-      );
-      console.log('Thread, added');
-      console.log(thread, added);
-      console.log(newMessage._id, thread?._id);
-      if (added) {
+      // const added = await addMessageToThread(
+      //   newMessage._id,
+      //   new mongoose.Types.ObjectId(thread?._id),
+      //   req?.body.message
+      // );
+      // console.log('Thread, added');
+      // console.log(thread, added);
+      // console.log(newMessage._id, thread?._id);
+      if (thread) {
         const toUser = await addThreadToUser(
           new mongoose.Types.ObjectId(thread?._id),
           new mongoose.Types.ObjectId(req.user?._id)
@@ -124,7 +124,9 @@ messageRoute.post(path, async (req: Request, res: Response) => {
               req.user?._id as unknown as ObjectId
             );
             console.log('To user && to other user');
-            res.status(200).json({ message: user, user: user });
+            res
+              .status(200)
+              .json({ thread: thread, message: newMessage, user: user });
           } else {
             console.log('Error adding to thread');
             res.status(500).json({ message: 'Error adding thread' });

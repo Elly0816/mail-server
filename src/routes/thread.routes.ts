@@ -14,6 +14,7 @@ import {
 } from '../controllers/message.controller';
 import mongoose, { isValidObjectId } from 'mongoose';
 import { userFromDb } from '../models/user.model';
+import { getUser } from '../controllers/user.controller';
 
 const threadRoute = Router();
 
@@ -28,25 +29,61 @@ threadRoute.get(`/${path}/:id`, async (req: Request, res: Response) => {
     if (!id) {
       res.status(400).json({ message: 'Bad Request' });
     } else {
-      const thread = (await getThread('_id', id)) as threadFromDb;
-      if (thread) {
-        const unread = await userUnreadCount(
-          thread.messages,
-          req.user?.email as string
+      const user = await getUser('_id', id);
+      if (user) {
+        let threads = (await Promise.all(
+          user.threads.map(async (thread) => {
+            return await getThread('_id', thread.toString());
+          })
+        )) as threadFromDb[];
+        threads = threads.sort((a, b) => {
+          return b.createdAt.getTime() - a.createdAt.getTime();
+        });
+        const unread = await Promise.all(
+          threads.map(async (thread) => {
+            return await userUnreadCount(
+              thread.messages,
+              req.user?.email as string
+            );
+          })
         );
-        const otherUser = await getUserFromThread(
-          thread._id,
-          req?.user as userFromDb
+        //      await userUnreadCount(
+        //   thread.messages,
+        //   req.user?.email as string
+        // );
+        const otherUser = await Promise.all(
+          threads.map(async (thread) => {
+            return await getUserFromThread(thread._id, req?.user as userFromDb);
+          })
         );
         res.status(200).json({
-          message: thread,
+          message: threads,
           user: req.user,
           unread: unread,
           otherUser: otherUser,
         });
       } else {
-        res.status(404).json({ message: 'Thread not found' });
+        res.status(404).json({ message: 'User not found!' });
       }
+      // const thread = (await getThread('_id', id)) as threadFromDb;
+      // if (thread) {
+      //   const unread = await userUnreadCount(
+      //     thread.messages,
+      //     req.user?.email as string
+      //   );
+      //   const otherUser = await getUserFromThread(
+      //     thread._id,
+      //     req?.user as userFromDb
+      //   );
+      //   res.status(200).json({
+      //     message: thread,
+      //     user: req.user,
+      //     unread: unread,
+      //     otherUser: otherUser,
+      //   });
+      // } else {
+      //   res.status(404).json({ message: 'Thread not found' });
+      // }
     }
   }
 });
