@@ -4,6 +4,7 @@ import { user, userFromDb } from '../models/user.model';
 import { getUser } from '../controllers/user.controller';
 import { compare } from '../utils/encodeDecode';
 import { signAccess, signRefresh } from '../controllers/auth.controller';
+import _, { Omit } from 'lodash';
 
 const loginRoute = Router();
 
@@ -39,7 +40,14 @@ loginRoute.post(`/${path}`, async (req: Request, res: Response) => {
         console.log(req.user);
         console.log('\n');
         console.log('\n');
-        res.status(200).json({ message: 'Logged In successfully', user: user });
+        const newUser = _.omit(req.user, ['password']) as Omit<
+          userFromDb,
+          'password'
+        >;
+
+        res
+          .status(200)
+          .json({ message: 'Logged In successfully', user: newUser });
       } else {
         res.status(400).json({ message: 'Incorrect username or password' });
       }

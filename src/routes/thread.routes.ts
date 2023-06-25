@@ -15,6 +15,7 @@ import {
 import mongoose, { isValidObjectId } from 'mongoose';
 import { userFromDb } from '../models/user.model';
 import { getUser } from '../controllers/user.controller';
+import _ from 'lodash';
 
 const threadRoute = Router();
 
@@ -56,9 +57,14 @@ threadRoute.get(`/${path}/:id`, async (req: Request, res: Response) => {
             return await getUserFromThread(thread._id, req?.user as userFromDb);
           })
         );
+        const newUser = _.omit(req.user, ['password']) as Omit<
+          userFromDb,
+          'password'
+        >;
+
         res.status(200).json({
           message: threads,
-          user: req.user,
+          user: newUser,
           unread: unread,
           otherUser: otherUser,
         });
@@ -103,7 +109,12 @@ threadRoute.post(`/${path}`, async (req: Request, res: Response) => {
     userId?._id as userFromDb['_id']
   );
   if (threadAddedToUser) {
-    res.status(201).json({ message: 'Thread added to User', user: req.user });
+    const newUser = _.omit(req.user, ['password']) as Omit<
+      userFromDb,
+      'password'
+    >;
+
+    res.status(201).json({ message: 'Thread added to User', user: newUser });
   }
   res.status(500).json({ message: 'There was an error' });
 });

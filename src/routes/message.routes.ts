@@ -16,6 +16,7 @@ import { Thread, threadFromDb } from '../models/thread.model';
 import mongoose, { ObjectId, isValidObjectId } from 'mongoose';
 import { getUser } from '../controllers/user.controller';
 import { userFromDb } from '../models/user.model';
+import _ from 'lodash';
 
 const messageRoute = Router();
 
@@ -49,9 +50,14 @@ messageRoute.get(`${path}/:id`, async (req: Request, res: Response) => {
     // const unreadCount = messages.filter(message => message.read !== true);
     // const newMessages = await Promise.all(messages);
     if (messages && messagesAreRead) {
+      const newUser = _.omit(req.user, ['password']) as Omit<
+        userFromDb,
+        'password'
+      >;
+
       res
         .status(200)
-        .json({ message: messages, user: req.user, otherUser: otherUser });
+        .json({ message: messages, user: newUser, otherUser: otherUser });
     } else {
       res
         .status(404)
@@ -85,9 +91,14 @@ messageRoute.post(path, async (req: Request, res: Response) => {
         );
         if (messageAddedToThread) {
           console.log('message added to thread');
+          const newUser = _.omit(req.user, ['password']) as Omit<
+            userFromDb,
+            'password'
+          >;
+
           res
             .status(201)
-            .json({ message: newMessage, thread: thread, user: req.user });
+            .json({ message: newMessage, thread: thread, user: newUser });
         } else {
           console.log('message could not be added to thread');
           res
@@ -124,9 +135,14 @@ messageRoute.post(path, async (req: Request, res: Response) => {
               req.user?._id as unknown as ObjectId
             );
             console.log('To user && to other user');
+            const newUser = _.omit(user, ['password']) as Omit<
+              userFromDb,
+              'password'
+            >;
+
             res
               .status(200)
-              .json({ thread: thread, message: newMessage, user: user });
+              .json({ thread: thread, message: newMessage, user: newUser });
           } else {
             console.log('Error adding to thread');
             res.status(500).json({ message: 'Error adding thread' });

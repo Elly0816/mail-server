@@ -4,6 +4,7 @@ import { User, user, userFromDb } from '../models/user.model';
 import { getUser } from '../controllers/user.controller';
 import { hash } from '../utils/encodeDecode';
 import { signAccess, signRefresh } from '../controllers/auth.controller';
+import _ from 'lodash';
 
 const registerRoute = Router();
 
@@ -52,9 +53,14 @@ registerRoute.post(`/${path}`, async (req: Request, res: Response) => {
             JSON.stringify({ access: access, refresh: refresh })
           );
           req.user = user;
+          const newUser = _.omit(req.user, ['password']) as Omit<
+            userFromDb,
+            'password'
+          >;
+
           res.status(201).json({
             message: 'You have been logged in successfully',
-            user: user,
+            user: newUser,
           });
         } else {
           res
