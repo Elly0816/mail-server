@@ -87,7 +87,8 @@ messageRoute.post(path, async (req: Request, res: Response) => {
         const messageAddedToThread = await addMessageToThread(
           newMessage._id,
           thread._id,
-          newMessage.body
+          newMessage.body,
+          newMessage.title
         );
         if (messageAddedToThread) {
           console.log('message added to thread');

@@ -108,6 +108,7 @@ const createThread = async (
     messages: [message._id.toString()],
     lastMessage: message.body,
     lastModified: Date.now(),
+    lastTitle: message.title,
   });
   let thread = (await Thread.findById(
     newThread._id
