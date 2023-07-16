@@ -38,7 +38,7 @@ threadRoute.get(`/${path}/:id`, async (req: Request, res: Response) => {
           })
         )) as threadFromDb[];
         threads = threads.sort((a, b) => {
-          return b.createdAt.getTime() - a.createdAt.getTime();
+          return b.lastModified.getTime() - a.lastModified.getTime();
         });
         const unread = await Promise.all(
           threads.map(async (thread) => {
