@@ -13,7 +13,7 @@ const getThread = async (
       switch (field) {
         case '_id':
           if (typeof value === 'string') {
-            // console.log(JSON.stringify(value));
+            // //console.log(JSON.stringify(value));
 
             try {
               // const id = new mongoose.Types.ObjectId(value);
@@ -22,8 +22,8 @@ const getThread = async (
               ).lean()) as threadFromDb;
               return thread;
             } catch (e) {
-              console.log(e);
-              console.log(...value);
+              //console.log(e);
+              //console.log(...value);
             }
           } else {
             const thread = (await Thread.findById(
@@ -68,12 +68,12 @@ const addThreadToUser = async (
   }
 
   const user = await User.findById(userId).lean();
-  console.log('This is the thread\n\n\n');
-  console.log(user?.threads);
-  console.log(threadId);
-  console.log('This is the thread\n\n\n');
+  //console.log('This is the thread\n\n\n');
+  //console.log(user?.threads);
+  //console.log(threadId);
+  //console.log('This is the thread\n\n\n');
 
-  console.log(user?.threads.includes(threadId.toString()));
+  //console.log(user?.threads.includes(threadId.toString()));
   if (user?.threads.includes(threadId.toString())) {
     return true;
   } else {

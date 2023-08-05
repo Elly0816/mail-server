@@ -37,6 +37,6 @@ app.use(messageRoute);
 
 tryConnect(() => {
   app.listen(PORT, () => {
-    console.log(`Server Running on PORT: ${PORT}`);
+    //console.log(`Server Running on PORT: ${PORT}`);
   });
 });

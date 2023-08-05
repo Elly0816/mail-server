@@ -122,16 +122,16 @@ const addMessageToThread = async (
   //     },
   //   },
   // ]);
-  // console.log('Thread in add message function');
-  // console.log(thread);
-  // console.log(thread.isOk());
+  // //console.log('Thread in add message function');
+  // //console.log(thread);
+  // //console.log(thread.isOk());
   let newThread;
   if (thread) {
     newThread = (await Thread.findOne(threadId).lean()) as threadFromDb;
   }
-  console.log(JSON.stringify(newThread));
-  console.log(messageId);
-  console.log(newThread?.messages.includes(messageId) ? true : false);
+  //console.log(JSON.stringify(newThread));
+  //console.log(messageId);
+  //console.log(newThread?.messages.includes(messageId) ? true : false);
   return newThread?.messages.includes(messageId.toString() as any)
     ? true
     : false;

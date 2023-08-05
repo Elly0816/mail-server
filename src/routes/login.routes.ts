@@ -33,13 +33,13 @@ loginRoute.post(`/${path}`, async (req: Request, res: Response) => {
           'Authorization',
           JSON.stringify({ access: access, refresh: refresh })
         );
-        console.log('\n');
-        console.log('\n');
-        console.log('user');
-        console.log('\n');
-        console.log(req.user);
-        console.log('\n');
-        console.log('\n');
+        //console.log('\n');
+        //console.log('\n');
+        //console.log('user');
+        //console.log('\n');
+        //console.log(req.user);
+        //console.log('\n');
+        //console.log('\n');
         const newUser = _.omit(req.user, ['password']) as Omit<
           userFromDb,
           'password'

@@ -73,9 +73,12 @@ messageRoute.post(path, async (req: Request, res: Response) => {
   // const message = req.body.message as message;
   const { threadId, title, body, to } = message;
   const otherUser = await getUser('email', to);
-  if (!(title && body && from && to)) {
-    // console.log(req.body);
-    console.log('Make sure you entered the correct fields');
+  if (!otherUser || otherUser == null) {
+    // console.log('Could not find the user');
+    res.status(500).json({ message: 'Could not find the other user' });
+  } else if (!(title && body && from && to)) {
+    // //console.log(req.body);
+    //console.log('Make sure you entered the correct fields');
     res
       .status(400)
       .json({ message: 'Make sure you entered the correct fields' });
@@ -91,7 +94,7 @@ messageRoute.post(path, async (req: Request, res: Response) => {
           newMessage.title
         );
         if (messageAddedToThread) {
-          console.log('message added to thread');
+          //console.log('message added to thread');
           const newUser = _.omit(req.user, ['password']) as Omit<
             userFromDb,
             'password'
@@ -101,13 +104,13 @@ messageRoute.post(path, async (req: Request, res: Response) => {
             .status(201)
             .json({ message: newMessage, thread: thread, user: newUser });
         } else {
-          console.log('message could not be added to thread');
+          //console.log('message could not be added to thread');
           res
             .status(500)
             .json({ message: 'Message could not be added to thread' });
         }
       } else {
-        console.log('message could not be created');
+        //console.log('message could not be created');
         res.status(500).json({ message: 'Message could not be created' });
       }
     } else {
@@ -117,9 +120,9 @@ messageRoute.post(path, async (req: Request, res: Response) => {
       //   new mongoose.Types.ObjectId(thread?._id),
       //   req?.body.message
       // );
-      // console.log('Thread, added');
-      // console.log(thread, added);
-      // console.log(newMessage._id, thread?._id);
+      // //console.log('Thread, added');
+      // //console.log(thread, added);
+      // //console.log(newMessage._id, thread?._id);
       if (thread) {
         const toUser = await addThreadToUser(
           new mongoose.Types.ObjectId(thread?._id),
@@ -135,7 +138,7 @@ messageRoute.post(path, async (req: Request, res: Response) => {
               '_id',
               req.user?._id as unknown as ObjectId
             );
-            console.log('To user && to other user');
+            //console.log('To user && to other user');
             const newUser = _.omit(user, ['password']) as Omit<
               userFromDb,
               'password'
@@ -145,15 +148,15 @@ messageRoute.post(path, async (req: Request, res: Response) => {
               .status(200)
               .json({ thread: thread, message: newMessage, user: newUser });
           } else {
-            console.log('Error adding to thread');
+            //console.log('Error adding to thread');
             res.status(500).json({ message: 'Error adding thread' });
           }
         } else {
-          console.log('Could not find the other user');
+          //console.log('Could not find the other user');
           res.status(500).json({ message: 'Could not find the other user' });
         }
       } else {
-        console.log('add msg to thread');
+        //console.log('add msg to thread');
         res.status(404).json({ message: 'add msg to thread' });
       }
     }

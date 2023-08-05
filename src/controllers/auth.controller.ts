@@ -6,7 +6,7 @@ import { ACCESS, REFRESH } from '../constants/constants';
 config();
 
 const signAccess = (user: userFromDb): string => {
-  //   console.log(user);
+  //   //console.log(user);
   const token: string = jwt.sign(user, ACCESS as string, {
     expiresIn: '1h',
   });
@@ -14,7 +14,7 @@ const signAccess = (user: userFromDb): string => {
 };
 
 const signRefresh = (user: userFromDb): string => {
-  //   console.log(user);
+  //   //console.log(user);
   const token: string = jwt.sign(user as object, REFRESH as string, {
     expiresIn: '1y',
   });

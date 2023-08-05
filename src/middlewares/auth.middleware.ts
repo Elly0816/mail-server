@@ -21,13 +21,13 @@ const serializeUser = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  // //console.log('\n');
-  // //console.log('\n');
-  // //console.log('request');
-  // //console.log('\n');
-  console.log(req.url);
-  // //console.log('\n');
-  // //console.log('\n');
+  // ////console.log('\n');
+  // ////console.log('\n');
+  // ////console.log('request');
+  // ////console.log('\n');
+  //console.log(req.url);
+  // ////console.log('\n');
+  // ////console.log('\n');
   res.setHeader(Headers.cors, '*');
   res.setHeader(Headers.headers, 'Authorization');
   // const accessUser = verifyAccess(req.headers['access'] as string)
@@ -43,7 +43,7 @@ const serializeUser = async (
   //       }
   // }
   const url = req.url.split('/');
-  //console.log(`The user is: ${req.user}`);
+  ////console.log(`The user is: ${req.user}`);
   if (
     (url.at(-1) == Endpoints.login ||
       url.at(-1) == Endpoints.signup ||
@@ -61,12 +61,12 @@ const serializeUser = async (
       JSON.parse(req.headers.authorization as string);
     const access = auth?.access as string;
     const refresh = auth?.refresh as string;
-    console.log('\n');
-    console.log('\n');
-    console.log(auth);
-    console.log('\n');
-    console.log('\n');
-    console.log('\n');
+    //console.log('\n');
+    //console.log('\n');
+    //console.log(auth);
+    //console.log('\n');
+    //console.log('\n');
+    //console.log('\n');
     // const refresh = req.headers.Refresh as string;
     const accessUser = verifyAccess(access as string);
     const refreshUser = verifyAccess(refresh as string);
@@ -83,7 +83,7 @@ const serializeUser = async (
         }
       }
       // req.user = decoded as unknown as userFromDb;
-      console.log(req.user);
+      //console.log(req.user);
       /*
         Make sure the decoded access token
         is valid and is the user
@@ -96,9 +96,9 @@ const serializeUser = async (
         //Access decoded token and access user do not match
         const refreshUser = verifyRefresh(refresh as string);
         const decoded = jwt.decode(refresh);
-        //console.log('\n\n' + refreshUser);
-        //console.log(decoded);
-        //console.log('Refresh user and decoded are above\n\n');
+        ////console.log('\n\n' + refreshUser);
+        ////console.log(decoded);
+        ////console.log('Refresh user and decoded are above\n\n');
         if (_.isEqual(decoded, refreshUser) && decoded && refreshUser) {
           req.user = refreshUser;
           const accessToken = signAccess(req.user as userFromDb);

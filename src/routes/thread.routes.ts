@@ -23,7 +23,7 @@ const path = `${protectedEndpoints.thread}`;
 
 threadRoute.get(`/${path}/:id`, async (req: Request, res: Response) => {
   const { id } = req.params;
-  console.log(id);
+  //console.log(id);
   if (!isValidObjectId(id)) {
     res.status(400).json({ message: 'Invalid Object Id' });
   } else {
